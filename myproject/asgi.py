@@ -18,9 +18,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
 
 #application = get_asgi_application()
 
-application  = ProtocolTypeRouter({
-    'http': get_asgi_application()}
-    "websocket": URLRouter(
-        myapp.routing.websocket_urlpatterns
-    )                        
-)
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),  # uses urls.py
+    "websocket": URLRouter(myapp.routing.websocket_urlpatterns), #uses routing.py
+})
