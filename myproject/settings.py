@@ -126,3 +126,6 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
+
+
+ASGI_APPLICATION = 'myproject.asgi.application'
