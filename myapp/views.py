@@ -4,9 +4,7 @@ import json
 # Create your views here.
 
 
-
-def chat_view(request):
-    return render(request, 'index.html')
-        
+def index(request):
+    return render(request, "chat/index.html")
 
 

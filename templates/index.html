@@ -4,37 +4,33 @@
     <title>Chat</title>
 </head>
 <body>
-
-<h2>Live Chat</h2>
-
-<input id="message" type="text">
+<h2>Chat Room</h2>
+<ul id="chat-log"></ul>
+<input id="message" type="text" autocomplete="off">
 <button onclick="sendMessage()">Send</button>
 
-<ul id="chat-log"></ul>
-
 <script>
-    const ws = new WebSocket("ws://127.0.0.1:8000/ws/chat/");
+const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/');
 
-    ws.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        const msg = data.message;
+ws.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const li = document.createElement('li');
+    li.textContent = data.message;
+    document.getElementById('chat-log').appendChild(li);
+};
 
-        const li = document.createElement("li");
-        li.textContent = msg;
-        document.getElementById("chat-log").appendChild(li);
-    };
+ws.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+};
 
-    function sendMessage() {
-        const input = document.getElementById("message");
-        const message = input.value;
+function sendMessage() {
+    const input = document.getElementById('message');
+    const message = input.value;
+    if (message.trim() === '') return;
 
-        ws.send(JSON.stringify({
-            'message': message
-        }));
-
-        input.value = '';
-    }
+    ws.send(JSON.stringify({'message': message}));
+    input.value = '';
+}
 </script>
-
 </body>
 </html>

@@ -1,12 +1,11 @@
-# myapp/consumers.py
-from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+from channels.generic.websocket import AsyncWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
-
     async def connect(self):
-        self.room_name = "global_chat"
-        self.room_group_name = f"chat_{self.room_name}"
+        # single user group (can add username later)
+        self.room_name = "test_room"
+        self.room_group_name = f'chat_{self.room_name}'
 
         # join group
         await self.channel_layer.group_add(
@@ -31,15 +30,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'chat_message',  # calls chat_message()
+                'type': 'chat_message',
                 'message': message
             }
         )
 
+    # receive message from group
     async def chat_message(self, event):
         message = event['message']
 
-        # send to WebSocket
+        # send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message
         }))
