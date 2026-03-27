@@ -12,6 +12,8 @@
 <script>
 const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/');
 
+ws.onopen = () => console.log("Connected!");
+
 ws.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const li = document.createElement('li');
@@ -20,6 +22,7 @@ ws.onmessage = function(e) {
 };
 
 ws.onclose = function(e) {
+    console.log("Closed");
     console.error('Chat socket closed unexpectedly');
 };
 
